@@ -1,0 +1,249 @@
+﻿@model List<Eshop.Data.Produkt>
+@{
+    ViewData["Title"] = "Shop Page";
+}
+
+<div class="row" style="margin-bottom:10px">
+    <img src="~/images/products_4.png" />
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+
+            @* Sort begin *@
+            <div class="card">
+                <div class="row col-12">
+                    <div class="col-3">
+                        Showing:
+                    </div>
+                    <div class="col-3">
+
+                    </div>
+                    <div class="col-3">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Show:
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">3</a>
+                                <a class="dropdown-item" href="#">6</a>
+                                <a class="dropdown-item" href="#">9</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Sort by:
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Price</a>
+                                <a class="dropdown-item" href="#">Price by</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            @* Sort end *@
+
+            <div class="album py-5 bg-light">
+                <div class="container">
+
+                    <div class="row">
+
+                        @{
+                            foreach (var item in Model)
+                            {
+                                <div class="col-md-4">
+                                    <div class="myProducts card mb-4 shadow-sm">
+                                        <img src="@item.Photo" width="305" />
+                                        <div class="middle">
+                                            @Html.ActionLink("Detail", "Detail", "Shop", new { id = item.IdProdukt, @class = "btn btn-primary text" })
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text" style="color:dimgray"><b>@item.ProdName</b></p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="btn-group">
+                                                    <label style="color:pink"><b>@item.Price &nbsp;<a>$</a></b></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                @for (int i = 0; i < item.Rate; i++)
+                                                {
+                                                    <img src="~/images/star.png" width="20" height="20" />
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+            @* Paggination *@
+            <br />
+            <br />
+            <div class="container" style="text-align:center">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+
+
+
+
+
+        </div>
+        <div class="jumbotron col-md-4">
+            <form asp-action="Index" asp-controller="Products" method="GET">
+                <div class="row">
+                    <input type="text" placeholder="Search our store" />
+                    <input type="submit" value="Search" />
+                </div>
+                <br />
+                <br />
+                <h5><b>Categories</b></h5>
+
+                @{
+
+                    if (Model != null)
+                    {
+                        if (ViewData["CategorieList"] != null)
+                        {
+                            var categories = (List<Eshop.Data.Category>)ViewData["CategorieList"];
+                            foreach (var item in categories)
+                            {
+                                <p><a href="@Url.Action("Index", "Products", new { catId = item.Id })">@item.CatName</a></p>
+                            }
+                        }
+                    }
+
+                }
+                <br />
+                <br />
+
+                <hr />
+                <br />
+
+                <h5><b>Vendors</b></h5>
+
+                @{
+                    if (ViewData["VendorList"] != null)
+                    {
+
+                        var vendors = (List<string>)ViewData["VendorList"];
+                        foreach (var item in vendors)
+                        {
+                            <div class="row col-6">
+                                <div class="col-3">
+                                    <input id="@item" name="Vendors" value="@item" type="checkbox" />
+                                </div>
+                                <div>
+                                    <label for="@item">@item</label>
+
+                                </div>
+                            </div>
+                        }
+
+                    }
+                }
+
+
+
+
+                <hr />
+                <br />
+
+                <h5><b>Colors</b></h5>
+                @{
+                    if (ViewData["ColorList"] != null)
+                    {
+                        var colors = (List<string>)ViewData["ColorList"];
+                        foreach (var item in colors)
+                        {
+                            <div class="row col-12">
+                                <div class="col-6">
+                                    <input id="@item" name="Colors" value="@item" type="checkbox" />
+                                    <label for="checkbox1">@item</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+
+
+                <hr />
+                <br />
+
+                <h5><b>Size</b></h5>
+                @{
+                    if (ViewData["SizeList"] != null)
+                    {
+                        var sizes = (List<string>)ViewData["SizeList"];
+                        foreach (var item in sizes)
+                        {
+                            <div class="row col-12">
+                                <div class="col-6">
+                                    <input id="@item" name="Sizes" value="@item" type="checkbox" />
+                                    <label for="checkbox1">@item</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+                
+
+
+                <hr />
+                <br />
+
+                <h5><b>Tags</b></h5>
+                @{
+                    if (ViewData["TagList"] != null)
+                    {
+                        var tags = (List<string>)ViewData["TagList"];
+                        foreach (var item in tags)
+                        {
+                            <div class="row col-12">
+                                <div class="col-6">
+                                    <input id="@item" name="Tags" value="@item" type="checkbox" />
+                                    <label for="checkbox1">@item</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
